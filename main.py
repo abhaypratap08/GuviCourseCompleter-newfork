@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
+import pyautogui as key
 
 def Login():
     email=driver.find_element(By.ID,'email')
@@ -19,18 +20,25 @@ def gotoCourse():
     driver.get('https://www.guvi.in/courses-video/?course=galgotiasservletsandjsp')
     video = driver.find_element(By.CSS_SELECTOR, ".plyr__control")
     video.click()
+    key.keyDown('D') 
+    time.sleep(3)           
+    key.keyUp('D') 
+
+
+    
 
 
 
 if __name__=="__main__":
-    driver = webdriver.Chrome()  # You can also use Firefox, Edge, etc.
-    driver.get("https://www.guvi.in/sign-in/")  # Open a webpage
+    driver = webdriver.Chrome()  
+    driver.get("https://www.guvi.in/sign-in/") 
     driver.maximize_window()
 
     Login()
     time.sleep(1)
     installExtension()
     gotoCourse()
+  
 
     time.sleep(10)
 

@@ -26,7 +26,7 @@ def gotoCourse():
     for i in range(len(listCourse)-1):
         print( listCourse[current_lecture].get_attribute("class"))
         if "completed" not in listCourse[current_lecture].get_attribute("class"):
-            print("Course not completed")
+            print("Course not completed" + listCourse[current_lecture].text)
             ActivityOpen = checkVideo()
             if ActivityOpen:
                 DoActivity()
@@ -36,9 +36,9 @@ def gotoCourse():
                 videoPlay.click()
                 count=0
                 # IMPORTANT WHEN USING SPEED CONTROLLER EXTENSION
-                while count<150:
-                    key.press('d')
-                    count+=1
+                # while count<150:
+                #     key.press('d')
+                #     count+=1
                 # IMPORTANT WHEN USING SPEED CONTROLLER EXTENSION
                 
                 while not ActivityOpen:
@@ -56,7 +56,7 @@ def gotoCourse():
 def checkVideo():
     timeVid = driver.find_element(By.XPATH, '/html/body/main/div[6]/div/div[3]/div[3]/div[1]/div/ul/li[1]/a')
     print(timeVid.get_attribute("class"))
-    if "active" in timeVid.get_attribute("class"):
+    if "disabled" not in timeVid.get_attribute("class"):
         return True
     return False
     
@@ -64,10 +64,29 @@ def DoActivity():
     print("Doing Activity")
     activityButton = driver.find_element(By.XPATH, '/html/body/main/div[6]/div/div[3]/div[3]/div[1]/div/ul/li[1]')
     activityButton.click()
-    listQuestions = driver.find_elements(By.XPATH, '/html/body/main/div[6]/div/div[3]/div[3]/div[2]/div/div[4]/div[1]')
+    listQuestions = driver.find_elements(By.XPATH, '/html/body/main/div[6]/div/div[3]/div[3]/div[2]/div/div[4]/div')
     print(len(listQuestions))
-    
+    listDict = {}
+    for i in range(len(listQuestions)):
+        listDict[i] = 0
+    print(listDict)
+    options = driver.find_elements(By.XPATH, '/html/body/main/div[6]/div/div[3]/div[3]/div[2]/div/div[4]/div[1]/div[2]/div[2]/div/button')
+    for i in range(len(listQuestions)):
+        option = driver.find_element(By.XPATH, f'/html/body/main/div[6]/div/div[3]/div[3]/div[2]/div/div[4]/div[{i+1}]/div[2]/div[2]/div/button[{listDict[i]+1}]')
+        option.click()
+        if i != len(listQuestions)-1:
+            if i==0:
+                nextButton = driver.find_element(By.XPATH, f'/html/body/main/div[6]/div/div[3]/div[3]/div[2]/div/div[4]/div[{i+1}]/div[2]/div[3]/button')
+                nextButton.click()
+            else:
+                nextButton = driver.find_element(By.XPATH, f'/html/body/main/div[6]/div/div[3]/div[3]/div[2]/div/div[4]/div[{i+1}]/div[2]/div[3]/button[2]')
+                nextButton.click()
 
+        else:
+            submitButton = driver.find_element(By.XPATH, f'/html/body/main/div[6]/div/div[3]/div[3]/div[2]/div/div[4]/div[{i+1}]/div[2]/div[3]/button[2]')
+            submitButton.click()
+        time.sleep(2)
+        
 if __name__=="__main__":
     driver = webdriver.Chrome()  
     driver.get("https://www.guvi.in/sign-in/") 
@@ -75,10 +94,9 @@ if __name__=="__main__":
     
     Login()
     time.sleep(1)
-    installExtension()
+    #installExtension()
     gotoCourse()
-    
-  
+
 
     time.sleep(10)
 

@@ -24,9 +24,8 @@ def gotoCourse():
     checkDone = driver.find_element(By.XPATH, '/html/body/main/div[6]/div/div[3]/div[3]/div[1]/div/ul/li[1]/a')
     listCourse = driver.find_elements(By.XPATH, "/html/body/main/div[6]/div/div[3]/div[4]/div/div[2]/div[1]/div[2]/div/ul/li")
     for i in range(len(listCourse)-1):
-        print( listCourse[current_lecture].get_attribute("class"))
         if "completed" not in listCourse[current_lecture].get_attribute("class"):
-            print("Course not completed" + listCourse[current_lecture].text)
+            print("Course not completed "  + listCourse[current_lecture].text)
             ActivityOpen = checkVideo()
             if ActivityOpen:
                 DoActivity()
@@ -55,7 +54,6 @@ def gotoCourse():
 
 def checkVideo():
     timeVid = driver.find_element(By.XPATH, '/html/body/main/div[6]/div/div[3]/div[3]/div[1]/div/ul/li[1]/a')
-    print(timeVid.get_attribute("class"))
     if "disabled" not in timeVid.get_attribute("class"):
         return True
     return False
@@ -65,13 +63,15 @@ def DoActivity():
     activityButton = driver.find_element(By.XPATH, '/html/body/main/div[6]/div/div[3]/div[3]/div[1]/div/ul/li[1]')
     activityButton.click()
     listQuestions = driver.find_elements(By.XPATH, '/html/body/main/div[6]/div/div[3]/div[3]/div[2]/div/div[4]/div')
-    print(len(listQuestions))
     listDict = {}
+    isCorrectDict = {}
     for i in range(len(listQuestions)):
         listDict[i] = 0
-    print(listDict)
+        isCorrectDict[i] = False
+  
     options = driver.find_elements(By.XPATH, '/html/body/main/div[6]/div/div[3]/div[3]/div[2]/div/div[4]/div[1]/div[2]/div[2]/div/button')
     for i in range(len(listQuestions)):
+        print(f'Doing Question {i+1}')
         option = driver.find_element(By.XPATH, f'/html/body/main/div[6]/div/div[3]/div[3]/div[2]/div/div[4]/div[{i+1}]/div[2]/div[2]/div/button[{listDict[i]+1}]')
         option.click()
         if i != len(listQuestions)-1:
@@ -85,7 +85,18 @@ def DoActivity():
         else:
             submitButton = driver.find_element(By.XPATH, f'/html/body/main/div[6]/div/div[3]/div[3]/div[2]/div/div[4]/div[{i+1}]/div[2]/div[3]/button[2]')
             submitButton.click()
-        time.sleep(2)
+            time.sleep(1)
+            for i in range(len(options)):
+                test = driver.find_element(By.XPATH, f'/html/body/div[9]/div/div/div[2]/div[2]/div/div[1]/div/div/ul/li[{i+1}]/a')
+                if "wrong" in test.text.lower():
+                    print(test.text + f" in Question {i+1}")
+                    listDict[i] +=1
+                    isCorrectDict[i] = False
+                elif "correct" in test.text.lower():
+                    isCorrectDict[i] = True
+                    
+        time.sleep(1)
+        
         
 if __name__=="__main__":
     driver = webdriver.Chrome()  
@@ -98,6 +109,5 @@ if __name__=="__main__":
     gotoCourse()
 
 
-    time.sleep(10)
 
     driver.close()

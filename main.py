@@ -27,7 +27,7 @@ def gotoCourse():
     listCourse = driver.find_elements(By.XPATH, "/html/body/main/div[6]/div/div[3]/div[4]/div/div[2]/div[1]/div[2]/div/ul/li")
     for i in range(len(listCourse)):
         driver.execute_script("window.scrollTo(0, 0);")
-        listCourse = driver.find_elements(By.XPATH, "/html/body/main/div[6]/div/div[3]/div[4]/div/div[2]/div[1]/div[2]/div/ul/li")
+        listCourse = driver.find_elements(By.XPATH, "/html/body/main/div[6]/div/div[3]/div[4]/div/div[2]/div[1]/div[2]/div/ul")
         time.sleep(1)
         print("testing point " + str(i+1) )
         if "completed" not in listCourse[current_lecture].get_attribute("class"):
@@ -73,7 +73,7 @@ def checkVideo():
     return False
     
 def DoActivity():
-    try:
+    # try:
         
         print("Doing Activity")
         time.sleep(3)
@@ -88,6 +88,7 @@ def DoActivity():
     
         options = driver.find_elements(By.XPATH, '/html/body/main/div[6]/div/div[3]/div[3]/div[2]/div/div[4]/div[1]/div[2]/div[2]/div/button')
         while False in isCorrectDict.values():
+            print(listDict , isCorrectDict)
             for i in range(len(listQuestions)):
                 print(f'Doing Question {i+1}')
                 time.sleep(1)
@@ -110,8 +111,9 @@ def DoActivity():
                     for i in range(len(listQuestions)):
                         
                         time.sleep(1)
-                        test = driver.find_element(By.XPATH, f'/html/body/div[9]/div/div/div[2]/div[2]/div/div[1]/div/div/ul/li[{i+1}]/a')
-                        if "wrong" in test.text.lower():
+                        test = driver.find_element(By.XPATH, f'/html/body/div[12]/div/div/div[2]/div[2]/div/div[1]/div/div/ul/li[{i+1}]/a/span')
+                        print()
+                        if "has-error" in test.get_attribute("class").lower():
                             print(test.text + f" in Question {i+1}")
                             listDict[i] +=1
                             isCorrectDict[i] = False
@@ -119,29 +121,29 @@ def DoActivity():
                                 isCorrectDict[i] = True
                     time.sleep(1)
                     if False in isCorrectDict.values():
-                        closeButton = driver.find_element(By.XPATH, '/html/body/div[9]/div/div/div[2]/div[2]/div/div[1]/div/div/ul/li[1]')
+                        closeButton = driver.find_element(By.XPATH, '/html/body/div[12]/div/div/div[2]/div[2]/div/div[1]/div/div/ul/li[1]/a/span')
                         closeButton.click()
                     
                 time.sleep(1)
             print(isCorrectDict)
             print(listDict)
-    except Exception as e:
-        print("Excaping do activity")
-        driver.refresh()
-        print("refreshed")
-        time.sleep(3)
-        return None
+    # except Exception as e:
+    #     print("Excaping do activity")
+    #     driver.refresh()
+    #     print("refreshed")
+    #     time.sleep(3)
+    #     return None
         
         
 if __name__=="__main__":
 
-    Course_link = 'https://www.guvi.in/courses-video/?course=galgotiasdsausingc'
+    Course_link = 'https://www.guvi.in/courses-video/?course=galgotiasjavacollections'
     driver = webdriver.Chrome()  
      
 
     #installExtension()
     time.sleep(1)
-    Login("chetan.24scse1010203@galgotiasuniversity.ac.in","Ayush@2006#")
+    Login()
     gotoCourse()
 
 

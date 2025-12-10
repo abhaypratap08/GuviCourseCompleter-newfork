@@ -29,9 +29,9 @@ def gotoCourse():
         driver.execute_script("window.scrollTo(0, 0);")
         listCourse = driver.find_elements(By.XPATH, "/html/body/main/div[6]/div/div[3]/div[4]/div/div[2]/div[1]/div[2]/div/ul")
         time.sleep(1)
-        print("testing point " + str(i+1) )
+        
         if "completed" not in listCourse[current_lecture].get_attribute("class"):
-            print("Course not completed "  + listCourse[current_lecture].text)
+            
             ActivityOpen = False
             ActivityOpen = checkVideo()
             if ActivityOpen:
@@ -59,7 +59,7 @@ def gotoCourse():
                     ActivityOpen = checkVideo()                                                            
                 
         else:
-            print("Course Completed "+ listCourse[current_lecture].text)
+        
             
             time.sleep(2)
             current_lecture+=1
@@ -75,7 +75,7 @@ def checkVideo():
 def DoActivity():
     # try:
         
-        print("Doing Activity")
+        
         time.sleep(3)
         activityButton = driver.find_element(By.XPATH, '/html/body/main/div[6]/div/div[3]/div[3]/div[1]/div/ul/li[1]')
         activityButton.click()
@@ -88,9 +88,9 @@ def DoActivity():
     
         options = driver.find_elements(By.XPATH, '/html/body/main/div[6]/div/div[3]/div[3]/div[2]/div/div[4]/div[1]/div[2]/div[2]/div/button')
         while False in isCorrectDict.values():
-            print(listDict , isCorrectDict)
+            
             for i in range(len(listQuestions)):
-                print(f'Doing Question {i+1}')
+                
                 time.sleep(1)
                 option = driver.find_element(By.XPATH, f'/html/body/main/div[6]/div/div[3]/div[3]/div[2]/div/div[4]/div[{i+1}]/div[2]/div[2]/div/button[{listDict[i]+1}]')
                 option.click()
@@ -112,9 +112,8 @@ def DoActivity():
                         
                         time.sleep(1)
                         test = driver.find_element(By.XPATH, f'/html/body/div[12]/div/div/div[2]/div[2]/div/div[1]/div/div/ul/li[{i+1}]/a/span')
-                        print()
                         if "has-error" in test.get_attribute("class").lower():
-                            print(test.text + f" in Question {i+1}")
+                           
                             listDict[i] +=1
                             isCorrectDict[i] = False
                         elif "correct" in test.text.lower():
@@ -125,8 +124,7 @@ def DoActivity():
                         closeButton.click()
                     
                 time.sleep(1)
-            print(isCorrectDict)
-            print(listDict)
+        
     # except Exception as e:
     #     print("Excaping do activity")
     #     driver.refresh()

@@ -20,16 +20,16 @@ def installExtension():
     time.sleep(3)
 
 def gotoCourse():
-    current_lecture = 0 
+    current_lecture = 0
     VideoIsPlaying = False
     driver.get(Course_link)
     checkDone = driver.find_element(By.XPATH, '/html/body/main/div[6]/div/div[3]/div[3]/div[1]/div/ul/li[1]/a')
     listCourse = driver.find_elements(By.XPATH, "/html/body/main/div[6]/div/div[3]/div[4]/div/div[2]/div[1]/div[2]/div/ul/li")
-    for i in range(len(listCourse)):
+    while current_lecture < len(listCourse):
         driver.execute_script("window.scrollTo(0, 0);")
-        listCourse = driver.find_elements(By.XPATH, "/html/body/main/div[6]/div/div[3]/div[4]/div/div[2]/div[1]/div[2]/div/ul")
+        listCourse = driver.find_elements(By.XPATH, "/html/body/main/div[6]/div/div[3]/div[4]/div/div[2]/div[1]/div[2]/div/ul/li")
         time.sleep(1)
-        
+
         if "completed" not in listCourse[current_lecture].get_attribute("class"):
             
             ActivityOpen = False
@@ -56,14 +56,17 @@ def gotoCourse():
                 
                 while not ActivityOpen:
                     time.sleep(2)
-                    ActivityOpen = checkVideo()                                                            
-                
+                    ActivityOpen = checkVideo()
+
+            current_lecture += 1
+            if current_lecture < len(listCourse):
+                listCourse[current_lecture].click()
+
         else:
-        
-            
             time.sleep(2)
-            current_lecture+=1
-            listCourse[current_lecture].click()
+            current_lecture += 1
+            if current_lecture < len(listCourse):
+                listCourse[current_lecture].click()
 
 def checkVideo():
     time.sleep(0.5)
